@@ -1,1 +1,3 @@
-print("hello world!")
+
+handleliste = ["ost", "paprika", "brød", "kaviar"]
+print(handleliste)
