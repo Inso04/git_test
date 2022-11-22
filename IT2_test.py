@@ -1,3 +1,4 @@
+#funksjoner
 def push(liste, ting):
     #legger til et element på starten av listen
     liste.insert(0, ting)
@@ -12,12 +13,14 @@ def rem(liste, antall):
     for i in range(antall):
         liste.remove(liste[(length - antall)])
 
+#oppgave 1
 handlekurv = ["ost", "paprika", "brød", "kaviar"]
 push(handlekurv, "ketchup")
 handlekurv[3] = "knekkebrød"
 pop(handlekurv)
 print(handlekurv)
 
+#oppgave 2
 tretyper = ["lønn", "hassel", "bjørk", "eik", "blodlønn", "furu", "gran"]
 tretyper.remove("eik")
 tretyper[2] = "hengebjørk"
@@ -26,3 +29,8 @@ tretyper.append("fjellbjørk")
 tretyper.append("dvergbjørk")
 tretyper = sorted(tretyper)
 print(tretyper)
+
+#oppgave 5
+tall = [4, 45, 32, 19, 100]
+tall = sorted(tall)
+print(tall)
