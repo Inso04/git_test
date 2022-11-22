@@ -30,7 +30,22 @@ tretyper.append("dvergbjørk")
 tretyper = sorted(tretyper)
 print(tretyper)
 
+#oppgave 3
+
+
+#oppgave 4
+
+
 #oppgave 5
 tall = [4, 45, 32, 19, 100]
 tall = sorted(tall)
 print(tall)
+
+#oppgave 6
+liste = []
+a = int(input("Skriv hvor mange elementer du vi ha i listen: "))
+
+for i in range(0, a):
+    liste.append(input(f"Element {i+1}: "))
+
+print(liste)
