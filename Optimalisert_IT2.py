@@ -6,8 +6,7 @@ def handleliste():
     handleliste.remove("kaviar")
     handleliste[3] = "knekkebrød"
     print(handleliste)
-
-handleliste()
+#handleliste()
 
 #Oppgave 2
 def tretyper():
@@ -20,5 +19,17 @@ def tretyper():
     tre.append("dvergbjørk")
     tre = sorted(tre)
     print(tre)
+#tretyper()
 
-tretyper()
+#Oppgave 3
+
+#Oppgave 4
+
+#Oppgave 5
+def tall():
+    tall = []
+    for i in range(0, 5):
+        tall.append(int(input(f"Element {i+1}: ")))
+    tall = sorted(tall)
+    print(tall)
+tall()
