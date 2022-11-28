@@ -15,7 +15,8 @@ def rem(liste, antall):
 
 #oppgave 1
 handlekurv = ["ost", "paprika", "brød", "kaviar"]
-push(handlekurv, "ketchup")
+m = str(input("legg til et element i lista: "))
+push(handlekurv, m)
 handlekurv[3] = "knekkebrød"
 pop(handlekurv)
 print(handlekurv)
@@ -41,7 +42,7 @@ tall = [4, 45, 32, 19, 100]
 tall = sorted(tall)
 print(tall)
 
-#oppgave 6
+#oppgave 6a
 liste = []
 a = int(input("Skriv hvor mange elementer du vi ha i listen: "))
 
@@ -49,3 +50,5 @@ for i in range(0, a):
     liste.append(input(f"Element {i+1}: "))
 
 print(liste)
+
+#oppgave 6b
