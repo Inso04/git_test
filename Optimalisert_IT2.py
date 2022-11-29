@@ -6,7 +6,6 @@ def handleliste():
     handleliste.remove("kaviar")
     handleliste[3] = "knekkebrød"
     print(handleliste)
-#handleliste()
 
 #Oppgave 2
 def tretyper():
@@ -19,12 +18,12 @@ def tretyper():
     tre.append("dvergbjørk")
     tre = sorted(tre)
     print(tre)
-#tretyper()
 
 #Oppgave 3
 
 
 #Oppgave 4
+
 
 #Oppgave 5
 def tall():
@@ -33,7 +32,6 @@ def tall():
         tall.append(int(input(f"Element {i+1}: ")))
     tall = sorted(tall)
     print(tall)
-#tall()
 
 #Oppgave 6a
 def liste():
@@ -42,7 +40,6 @@ def liste():
     for i in range(0, a):
         liste.append(input(f"Element {i+1}: "))
     print(liste)
-#liste()
 
 #Oppgave 6b
 from tkinter import *
@@ -59,4 +56,12 @@ def list_with_select_element():
     drop = OptionMenu( start , var ,*liste )
     drop.pack()
     start.mainloop()
+
+#Oppgave svarene
+handleliste()
+tretyper()
+#Oppg 3
+#Oppg 4
+tall()
+liste()
 list_with_select_element()
