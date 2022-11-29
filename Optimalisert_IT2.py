@@ -6,7 +6,7 @@ def handleliste():
     handleliste.remove("kaviar")
     handleliste[3] = "knekkebrød"
     print(handleliste)
-handleliste()
+#handleliste()
 
 #Oppgave 2
 def tretyper():
@@ -19,9 +19,10 @@ def tretyper():
     tre.append("dvergbjørk")
     tre = sorted(tre)
     print(tre)
-tretyper()
+#tretyper()
 
 #Oppgave 3
+
 
 #Oppgave 4
 
@@ -32,7 +33,7 @@ def tall():
         tall.append(int(input(f"Element {i+1}: ")))
     tall = sorted(tall)
     print(tall)
-tall()
+#tall()
 
 #Oppgave 6a
 def liste():
@@ -41,4 +42,21 @@ def liste():
     for i in range(0, a):
         liste.append(input(f"Element {i+1}: "))
     print(liste)
-liste()
+#liste()
+
+#Oppgave 6b
+from tkinter import *
+def list_with_select_element():
+    liste = []
+    slutt = int(input("Skriv hvor mange elementer du vil ha i listen: "))
+    for i in range(0, slutt):
+         liste.append(input(f"Element {i+ 1}: ")) 
+
+    start = Tk()
+    start.geometry( "200x200" )
+    var = StringVar()
+
+    drop = OptionMenu( start , var ,*liste )
+    drop.pack()
+    start.mainloop()
+list_with_select_element()
