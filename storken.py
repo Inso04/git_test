@@ -23,7 +23,7 @@ Metoder:
 - Drikke
 '''
 
-class person:
+class Person:
     def __init__(self, kjønn: str, høyde: int, alder: int, hårfarge: str, øyenfarge: str, favfarge: str):
         self._kjønn = kjønn
         self._høyde = høyde
