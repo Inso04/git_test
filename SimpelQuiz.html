@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <style>
+        body{
+            padding: 0;
+            margin: 0;    
+            width:100vw;
+            height: 100vh;    
+            background-color: grey;
+        }
+        .panel{
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .question-container{
+            margin: 10px;
+            padding: 50px;
+            width: 75vw;
+            height: 5vh;
+            background-color: darkgrey;
+            font-size: x-large;
+            text-align: center;
+        }
+        .theme-container{
+            margin: 10px;
+            padding: 10px;
+            width: 75vw;
+            height: 5vh;
+            background-color: darkgrey;
+        }
+        #question {
+            font-size: 30px;
+        }
+        .resultat{
+            margin: 10px;
+            padding: 5px;
+            width:80vw;
+            height: 10vh;
+            text-align: center;
+            font-size: 70px;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;;
+        }
+
+        .option-container{
+            display: flex;
+            justify-content: space-around;
+            margin: 10px;
+            padding: 20px;
+            width: 75vw;
+            height: 10vh;
+        }
+        .option{    
+            padding: 10px;
+            width: 15vw;
+            height: 10vh;
+            font-size: 18px;
+            color: white;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
+        #op1, #op2, #op3, #op4, #op5, #op6 {
+            background-color: #a1a1a1;
+        }
+        #op1:hover, #op2:hover, #op3:hover, #op4:hover, #op5:hover, #op6:hover {
+            background-color: #c60929;
+        }
+        .navigation{
+            width: 75vw;
+            height: 8vh;
+            padding: 20px;
+            margin: 10px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .evaluate,.next{
+            width:20vw;
+            height: 8vh;
+            padding: 5px;
+            font-size: larger;
+        }
+        .evaluate{
+            background-color: #50DBB4;
+        }
+        .next{
+            color: white;
+            background-color: #BF3325;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="panel">
+        <div class="resultat">
+        </div>
+
+        <div class="question-container" id="question">
+        </div>
+        <!--får ikke tema til å fungere-->
+        <!--<div class="theme-container" id="tema">
+        </div> -->
+
+        <div class="option-container">
+            <button class="option" id="op1" >option1</button>
+    
+            <button class="option" id="op2" >option2</button>
+    
+            <button class="option" id="op3">option3</button>
+    
+            <button class="option" id="op4">option4</button>
+
+            <button class="option" id="op5">option5</button>
+
+            <button class="option" id="op6">option6</button>
+
+        </div>
+        
+        <div class="navigation">
+            <button class="evaluate">Check</button>
+            <button class="next">Next</button>
+        </div>
+    </div>
+
+    <script>
+    // Spørsmålene
+    const Questions = [{
+        id: 0, //Spill Programmering
+        t: "Spill programmering",
+        q: "Hvilket spårk ble brukt for Rollercoaster Tycoon?",
+        a: [{ text: "Assembly", isCorrect: true },
+            { text: "JavaScripts", isCorrect: false },
+            { text: "Python", isCorrect: false },
+            { text: "Ruby", isCorrect: false },
+            { text: "Rust", isCorrect: false},
+            { text: "html", isCorrect: false}
+        ]
+    },
+    {
+        id: 1, //Planlegging og dokumentasjon
+        t: "Planlegging og dokumentasjon",
+        q: "Hvorfor er det viktig å dokumentere?",
+        a: [{ text: "For å gjøre det fint", isCorrect: false },
+            { text: "Man har bedre oversikt", isCorrect: true },
+            { text: "Gjør det urdyddig", isCorrect: false },
+            { text: "Læreren liker det ikke", isCorrect: false },
+            { text: "Gjør det uoversiktelig", isCorrect: false },
+            { text: "Fordi noen sa det", isCorrect: false }
+        ]
+    },
+    {
+        id: 2, //OOP
+        t: "Objekt Orientert Programmering",
+        q: "Hvorfor burde man bruke Objekt Orientert Programmering?",
+        a: [{ text: "Ser kulere ut", isCorrect: false },
+            { text: "Er kult", isCorrect: false },
+            { text: "Er flere linjer kode", isCorrect: false },
+            { text: "Lettere å legge til flere objekter", isCorrect: true},
+            { text: "Er komplisert", isCorrect: false },
+            { text: "For å gjøre læreren glad", isCorrect: false }
+        ]
+    },
+    {
+        id: 3, //Valgritt emne
+        t: "html",
+        q: "Hva står HTML for?",
+        a: [{ text: "HighText Machine Language", isCorrect: false },
+            { text: "Hyperlenker Markup Language", isCorrect: false },
+            { text: "Hyperaktiv Tarkov Mark Language", isCorrect: false },
+            { text: "HypeT Maskin Språk", isCorrect: false},
+            { text: "HyperText Markup Language", isCorrect: true },
+            { text: "Ingen av disse", isCorrect: false }
+        ]
+    }]
+
+        // Set start
+        var start = true;
+
+        // Iterate
+        function iterate(id) {
+            // Få resultat display seksjonen
+            var resultat = document.getElementsByClassName("resultat");
+            resultat[0].innerText = "";
+
+            // Tema til spørsmålet
+            //NB får ikke tema til å fungere
+            /*const theme = document.getElementsById("tema");
+            tema.innerText = Questions[id].t; */
+
+            // Få spørsmålet
+            const question = document.getElementById("question");
+            // Sette spørsmåls tekst
+            question.innerText = Questions[id].q;
+
+            // Få valgene
+            const op1 = document.getElementById('op1');
+            const op2 = document.getElementById('op2');
+            const op3 = document.getElementById('op3');
+            const op4 = document.getElementById('op4');
+            const op5 = document.getElementById('op5');
+            const op6 = document.getElementById('op6');
+
+            // Gir valgene tekst
+            op1.innerText = Questions[id].a[0].text;
+            op2.innerText = Questions[id].a[1].text;
+            op3.innerText = Questions[id].a[2].text;
+            op4.innerText = Questions[id].a[3].text;
+            op5.innerText = Questions[id].a[4].text;
+            op6.innerText = Questions[id].a[5].text;
+
+            // Gir "true" eller "false" verdien til valgene
+            op1.value = Questions[id].a[0].isCorrect;
+            op2.value = Questions[id].a[1].isCorrect;
+            op3.value = Questions[id].a[2].isCorrect;
+            op4.value = Questions[id].a[3].isCorrect;
+            op5.value = Questions[id].a[4].isCorrect;
+            op6.value = Questions[id].a[5].isCorrect;
+
+            var selected = "";
+
+            // Vises ved valg av op1
+            op1.addEventListener("click", () => {
+                op1.style.backgroundColor = "#c60929";
+                op2.style.backgroundColor = "#a1a1a1";
+                op3.style.backgroundColor = "#a1a1a1";
+                op4.style.backgroundColor = "#a1a1a1";
+                op5.style.backgroundColor = "#a1a1a1";
+                op6.style.backgroundColor = "#a1a1a1";
+                selected = op1.value;
+            })
+            // Vises ved valg av op2
+            op2.addEventListener("click", () => {
+                op1.style.backgroundColor = "#a1a1a1";
+                op2.style.backgroundColor = "#c60929";
+                op3.style.backgroundColor = "#a1a1a1";
+                op4.style.backgroundColor = "#a1a1a1";
+                op5.style.backgroundColor = "#a1a1a1";
+                op6.style.backgroundColor = "#a1a1a1";
+                selected = op2.value;
+            })
+            // Vises ved valg av op3
+            op3.addEventListener("click", () => {
+                op1.style.backgroundColor = "#a1a1a1";
+                op2.style.backgroundColor = "#a1a1a1";
+                op3.style.backgroundColor = "#c60929";
+                op4.style.backgroundColor = "#a1a1a1";
+                op5.style.backgroundColor = "#a1a1a1";
+                op6.style.backgroundColor = "#a1a1a1";
+                selected = op3.value;
+            })
+            // Vises ved valg av op4
+            op4.addEventListener("click", () => {
+                op1.style.backgroundColor = "#a1a1a1";
+                op2.style.backgroundColor = "#a1a1a1";
+                op3.style.backgroundColor = "#a1a1a1";
+                op4.style.backgroundColor = "#c60929";
+                op5.style.backgroundColor = "#a1a1a1";
+                op6.style.backgroundColor = "#a1a1a1";
+                selected = op4.value;
+            })
+            // Vises ved valg av op5
+            op5.addEventListener("click", () => {
+                op1.style.backgroundColor = "#a1a1a1";
+                op2.style.backgroundColor = "#a1a1a1";
+                op3.style.backgroundColor = "#a1a1a1";
+                op4.style.backgroundColor = "#a1a1a1";
+                op5.style.backgroundColor = "#c60929";
+                op6.style.backgroundColor = "#a1a1a1";
+                selected = op5.value;
+            })
+            // Vises ved valg av op6
+            op6.addEventListener("click", () => {
+                op1.style.backgroundColor = "#a1a1a1";
+                op2.style.backgroundColor = "#a1a1a1";
+                op3.style.backgroundColor = "#a1a1a1";
+                op4.style.backgroundColor = "#a1a1a1";
+                op5.style.backgroundColor = "#a1a1a1";
+                op6.style.backgroundColor = "#c60929";
+                selected = op6.value;
+            })
+
+            // Ta tak i evalueringsknappen
+            const evaluate = document.getElementsByClassName("evaluate");
+
+            // Vurdering
+            evaluate[0].addEventListener("click", () => {
+                if (selected == "true") {
+                    resultat[0].innerHTML = "Correct :D";
+                    resultat[0].style.color = "green";
+                } else {
+                    resultat[0].innerHTML = "Wrong >:(";
+                    resultat[0].style.color = "red";
+                }
+            })
+        }
+
+        if (start) {
+        iterate("0");
+        }
+
+
+        // "Next" knappen
+        const next = document.getElementsByClassName('next')[0];
+        var id = 0;
+
+        next.addEventListener("click", () => {
+        start = false;
+        if (id < 4) {
+            id++;
+            iterate(id);
+            console.log(id);
+            op1.style.backgroundColor = "#a1a1a1";
+            op2.style.backgroundColor = "#a1a1a1";
+            op3.style.backgroundColor = "#a1a1a1";
+            op4.style.backgroundColor = "#a1a1a1";
+            op5.style.backgroundColor = "#a1a1a1";
+            op6.style.backgroundColor = "#a1a1a1";
+        }
+    })
+    </script>
+</body>
+</html>

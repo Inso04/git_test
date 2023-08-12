@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertikal veggtennis</title>
+    <style>
+    body{
+        background: black;
+    }
+  #minCanvas{
+    border: 20px solid blue;
+    border-top: none;
+    border-bottom: none;
+  }
+  #divPoeng{
+    width: 400px;
+    background-color: blue;
+    height: 30px;
+    line-height: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  #Poeng{
+    font-size: 20px;
+    color: white;
+    font-family: Arial;
+    margin: 0;
+    float: left;
+  }
+  </style>
+</head>
+<body>
+    <div id="divPoeng">
+        <h1 id="RacketPoeng">Poeng: 0</h1>
+    </div>
+    <canvas id="minCanvas"></canvas>
+    <script>
+        const minCanvas = document.getElementById('minCanvas');
+        minCanvas.width = 400;
+        minCanvas.height = 550;
+        const ctx = minCanvas.getContext('2d');
+        var theGameIsOn = true;
+        var RacketPoeng = document.getElementById("RacketPoeng");
+        var poeng = 0;
+
+        //BaneKlasse
+        class bane{
+            constructor(bredde, høyde, banefarge, linjefarge, linjetykkelse){
+                this.bredde = bredde
+                this.høyde = høyde
+                this.banefarge = banefarge
+                this.linjefarge = linjefarge
+                this.linjetykkelse = linjetykkelse
+            }
+        }
+        bane = new bane(minCanvas.width, minCanvas.height, "black", "white", 4);
+
+        //BallKlasse
+        class ball{
+            constructor(xpos, ypos, xretning, yretning, xfart, yfart, radius, color){
+                this.xpos = xpos
+                this.ypos = ypos
+                this.xretning = xretning
+                this.yretning = yretning
+                this.xfart = xfart
+                this.yfart = yfart
+                this.radius = radius
+                this.color = color
+            }
+        }
+        var grav = 0.2;
+        ball = new ball(minCanvas.width/3, minCanvas.height/3, -1, 1, 4, 4, 7, "white");
+
+        //Racket/Rektangel
+        var Rektangel = {
+            "bredde": 70,
+            "høyde": 10,
+            "farge": "white",
+            "xpos": bane.bredde/2 -35,
+            "ypos": bane.høyde - 15,
+            "yretning": 0,
+            "yfart": 5
+        };
+        //Tillegsoppgave 1 ekstra hindring
+        class hindring{
+            constructor(bredde, høyde, farge, xpos, ypos){
+                this.bredde = bredde
+                this.høyde = høyde
+                this.farge = farge
+                this.xpos = xpos
+                this.ypos = ypos
+            }
+        }
+        hindring = new hindring(70, 10, "red", bane.bredde/2 - 35, bane.høyde/2 + 5);
+
+        //Keybinds (tastekontroller)
+        //taste kode 65 er 'a' og tastekode 68 er 'd'
+        document.onkeydown = function(evt){ //Når du trykker på knappen
+            var tastekode = evt.keyCode;
+            if(tastekode === 65){
+                Rektangel.yretning = -1;
+            }
+            if(tastekode === 68){
+                Rektangel.yretning = 1;
+            }
+        }
+        document.onkeyup = function(evt){ //Når du ikke trykker på knappen
+            var tastekode = evt.keyCode;
+            if(tastekode === 65 && Rektangel.yretning === -1){
+                Rektangel.yretning = 0;
+            }
+            if(tastekode === 68 && Rektangel.yretning === 1){
+                Rektangel.yretning = 0;
+            }
+        }
+
+        //tegnefunksjoner
+        function tegnBane(){
+            ctx.fillStyle = bane.banefarge;
+            ctx.fillRect(0, 0, bane.bredde, bane.høyde);
+            ctx.fillStyle = bane.linjefarge;
+        }
+        function tegnBall(){
+            ctx.beginPath();
+            ctx.arc(ball.xpos, ball.ypos, ball.radius, 0, Math.PI*2);
+            ctx.closePath();
+            ctx.fillStyle = ball.farge;
+            ctx.fill();
+            /*if(ball.ypos < 500){
+                ball.yfart = ball.yfart + grav*ball.yretning
+            }*/
+            ball.xpos = ball.xpos + ball.xfart * ball.xretning;
+            ball.ypos = ball.ypos + ball.yfart * ball.yretning;
+        }
+        function tegnRektangel(){
+            ctx.fillStyle = Rektangel.farge;
+            ctx.fillRect(Rektangel.xpos, Rektangel.ypos, Rektangel.bredde, Rektangel.høyde);
+            if(Rektangel.xpos <= 0 && Rektangel.yretning === -1){
+                return;
+            }
+            if(Rektangel.xpos + Rektangel.bredde >= bane.bredde && Rektangel.yretning === 1){
+                return;
+            }
+            Rektangel.xpos = Rektangel.xpos + (Rektangel.yfart*Rektangel.yretning);
+        }
+        //Kollisjonsfunksjoner
+        function ballVeggKollisjon(){
+            if(ball.ypos <= ball.radius){ //Øvre vegg
+                ball.yretning = 1; //går nedover
+            }
+            if(ball.xpos <= ball.radius){
+                ball.xretning = 1; //går til høyre
+            }
+            if(ball.xpos + ball.radius >= bane.bredde){
+                ball.xretning = -1; //går til venstre
+            }
+        }
+        function ballRektangelKollisjon(){
+            var ballenVenstre = ball.xpos + ball.radius < Rektangel.xpos;
+            var ballenHøyre = ball.xpos - ball.radius > Rektangel.xpos + Rektangel.bredde;
+            var ballenOver = ball.ypos + ball.radius < Rektangel.ypos;
+            var ballenUnder = ball.ypos - ball.radius > Rektangel.ypos + Rektangel.høyde;
+            if(!ballenVenstre&&!ballenHøyre&&!ballenOver&&!ballenUnder){
+                ball.yretning = -1; //Ballen traff Rektangelen og går til venstre
+                poeng = poeng + 1;
+                RacketPoeng.innerHTML = "Poeng: " + poeng;
+            } 
+        }
+        function tegnHindring(){
+            ctx.fillStyle = hindring.farge;
+            ctx.fillRect(hindring.xpos, hindring.ypos, hindring.bredde, hindring.høyde);
+        }
+        function hindringKollisjon(){
+            var ballenV = ball.xpos + ball.radius > hindring.xpos;
+            var ballenH = ball.xpos - ball.radius < hindring.xpos + hindring.bredde;
+            var ballenO = ball.ypos + ball.radius > hindring.ypos;
+            var ballenU = ball.ypos - ball.radius < hindring.ypos + hindring.høyde;
+            if(ballenV&&ballenH&&ballenO&&ballenU){
+                ball.yretning = -1;
+            }
+        }
+        //Sjekker om ballen er uttenfor banen
+        function ballUtenforBane(){
+            if(ball.y >= bane.høyde + ball.radius*2){
+                theGameIsOn = false;
+            }
+        }
+        function ballDead(){
+            if(ball.ypos + ball.radius >= bane.høyde){ //Nedre vegg
+                ball.ypos = minCanvas.height/2;
+                ball.xpos = minCanvas.width/2;
+                poeng = 0;
+                RacketPoeng.innerHTML = "Poeng: " + poeng;
+            }
+        }
+        function gameLoop(){
+            tegnBane();
+            tegnBall();
+            tegnRektangel();
+            ballVeggKollisjon();
+            ballRektangelKollisjon();
+            ballUtenforBane();
+            tegnHindring();
+            hindringKollisjon();
+            ballDead();
+            if(theGameIsOn){
+                requestAnimationFrame(gameLoop);
+            }
+        }
+        gameLoop();
+    </script>
+</body>
+</html>

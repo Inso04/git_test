@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pong</title>
+  <meta charset="UTF-8">
+  <style>
+    body{
+        background: black;
+    }
+  #minCanvas{
+    border: 20px solid blue;
+    border-right: none;
+    border-top: none;
+    border-left: none;
+  }
+  #divPoeng{
+    width: 1200;
+    background-color: blue;
+    height: 30px;
+    line-height: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  #Person1, #Person2{
+    font-size: 20px;
+    color: white;
+    font-family: Arial;
+    margin: 0;
+  }
+  #Person1{
+    float: left;
+  }
+  #Person2{
+    float: right;
+  }
+  </style>
+</head>
+<body>
+<div id="divPoeng">
+    <h1 id="Person1">P1: 0</h1>
+    <h1 id="Person2">P2: 0</h1>
+</div>
+<canvas id="minCanvas"></canvas>
+<script>
+    const minCanvas = document.getElementById('minCanvas');
+    minCanvas.width = window.innerWidth * 0.977;
+    minCanvas.height = window.innerHeight * 0.87;
+    const ctx = minCanvas.getContext('2d');
+    var theGameIsOn = true;
+    var Person1 = document.getElementById("Person1");
+    var Person2 = document.getElementById("Person2");
+    var P1 = 0;
+    var P2 = 0;
+
+    //objekter
+    class bane{
+        constructor(bredde, høyde, banefarge, linjefarge, linjetykkelse){
+            this.bredde = bredde
+            this.høyde = høyde
+            this.banefarge = banefarge
+            this.linjefarge = linjefarge
+            this.linjetykkelse = linjetykkelse
+        }
+    }
+    bane = new bane(minCanvas.width, minCanvas.height, "black", "white", 4);
+
+    class ball{
+        constructor(xpos, ypos, xretning, yretning, xfart, yfart, radius, color){
+            this.xpos = xpos
+            this.ypos = ypos
+            this.xretning = xretning
+            this.yretning = yretning
+            this.xfart = xfart
+            this.yfart = yfart
+            this.radius = radius
+            this.color = color
+        }
+    }
+    ball = new ball(minCanvas.width/2, minCanvas.height/2, -1, 1, 4, 4, 7, "white");
+
+    var VRektangel = {
+        "bredde": 10,
+        "høyde": 50,
+        "farge": "white",
+        "xpos": bane.bredde - 15,
+        "ypos": bane.høyde/2,
+        "yretning": 0,
+        "yfart": 5
+    };
+
+    var HRektangel = {
+        "bredde": 10,
+        "høyde": 50,
+        "farge": "white",
+        "xpos": 15,
+        "ypos": bane.høyde/2,
+        "yretning": 0,
+        "yfart": 5
+    };
+
+    //Keybind VRektangel
+    document.onkeydown = function(evt){
+        var tastekode = evt.keyCode;
+        if(tastekode === 38){
+            VRektangel.yretning = -1;
+        }
+        if(tastekode === 40){
+            VRektangel.yretning = 1;
+        }
+        if(tastekode === 87){
+            HRektangel.yretning = -1;
+        }
+        if(tastekode === 83){
+            HRektangel.yretning = 1;
+        }
+    }
+    document.onkeyup = function(evt){
+        var tastekode = evt.keyCode;
+        if(tastekode === 38 && VRektangel.yretning === -1){
+            VRektangel.yretning = 0;
+        }
+        if(tastekode === 40 && VRektangel.yretning === 1){
+            VRektangel.yretning = 0;
+        }
+        if(tastekode === 87 && HRektangel.yretning === -1){
+            HRektangel.yretning = 0;
+        }
+        if(tastekode === 83 && HRektangel.yretning === 1){
+            HRektangel.yretning = 0;
+        }
+    }
+
+    //funksjoner
+    function tegnBane(){
+        ctx.fillStyle = bane.banefarge;
+        ctx.fillRect(0, 0, bane.bredde, bane.høyde);
+        ctx.fillStyle = bane.linjefarge;
+        ctx.fillRect(bane.bredde/2 - bane.linjetykkelse/2, 0, bane.linjetykkelse, bane.høyde);
+    }
+    function tegnBall(){
+        ctx.beginPath();
+        ctx.arc(ball.xpos, ball.ypos, ball.radius, 0, Math.PI*2);
+        ctx.closePath();
+        ctx.fillStyle = ball.farge;
+        ctx.fill();
+        ball.xpos = ball.xpos + ball.xfart * ball.xretning;
+        ball.ypos = ball.ypos + ball.yfart * ball.yretning;
+    }
+    function tegnVRektangel(){
+        ctx.fillStyle = VRektangel.farge;
+        ctx.fillRect(VRektangel.xpos, VRektangel.ypos, VRektangel.bredde, VRektangel.høyde);
+        if(VRektangel.ypos <= 0 && VRektangel.yretning === -1){
+            return;
+        }
+        if(VRektangel.ypos + VRektangel.høyde >= bane.høyde && VRektangel.yretning === 1){
+            return;
+        }
+        VRektangel.ypos = VRektangel.ypos + (VRektangel.yfart*VRektangel.yretning);
+    }
+    function tegnHRektangel(){
+        ctx.fillStyle = HRektangel.farge;
+        ctx.fillRect(HRektangel.xpos, HRektangel.ypos, HRektangel.bredde, HRektangel.høyde);
+        if(HRektangel.ypos <= 0 && HRektangel.yretning === -1){
+            return;
+        }
+        if(HRektangel.ypos + HRektangel.høyde >= bane.høyde && HRektangel.yretning === 1){
+            return;
+        }
+        HRektangel.ypos = HRektangel.ypos + (HRektangel.yfart*HRektangel.yretning);
+    }
+    function ballVeggKollisjon(){
+        if(ball.ypos + ball.radius >= bane.høyde){ //Nedre vegg
+            ball.yretning = -1; //går oppover
+        }
+        if(ball.ypos <= ball.radius){ //Øvre vegg
+            ball.yretning = 1; //går nedover
+        }
+    }
+    function ballRektangelKollisjon(){
+        var ballenVenstre = ball.xpos + ball.radius < VRektangel.xpos;
+        var ballenHøyre = ball.xpos - ball.radius > VRektangel.xpos + VRektangel.bredde;
+        var ballenOver = ball.ypos + ball.radius < VRektangel.ypos;
+        var ballenUnder = ball.ypos - ball.radius > VRektangel.ypos + VRektangel.høyde;
+        if(!ballenVenstre&&!ballenHøyre&&!ballenOver&&!ballenUnder){
+            ball.xretning = -1; //Ballen traff Rektangelen og går til venstre
+        }
+        var HballenVenstre = ball.xpos + ball.radius < HRektangel.xpos;
+        var HballenHøyre = ball.xpos - ball.radius > HRektangel.xpos + HRektangel.bredde;
+        var HballenOver = ball.ypos + ball.radius < HRektangel.ypos;
+        var HballenUnder = ball.ypos - ball.radius > HRektangel.ypos + HRektangel.høyde;
+        if(!HballenVenstre&&!HballenHøyre&&!HballenOver&&!HballenUnder){
+            ball.xretning = 1;
+        }
+    }
+    function ballUtenforBane(){
+        if(ball.x > bane.bredde + ball.radius*2){
+            theGameIsOn = false;
+        }
+    }
+    function ballDødOgPoeng(){
+        if(ball.xpos + ball.radius >= bane.bredde){
+            ball.ypos = minCanvas.height/2;
+            ball.xpos = minCanvas.width/2;
+            P1 = P1 + 1;
+            Person1.innerHTML="P1:"+ P1;
+        }
+        if(ball.xpos <= ball.radius){ 
+            ball.ypos = minCanvas.height/2;
+            ball.xpos = minCanvas.width/2;
+            P2 = P2 + 1;
+            Person2.innerHTML="P2:"+ P2;
+        }
+    }
+    function pongVinner(){
+        if(P1 == 3){
+            P1 = 0
+            P2 = 0
+            Person1.innerHTML="P1:"+ P1;
+            Person2.innerHTML="P2:"+ P2;
+            alert('Spiller 1 vant! Trykk "ok" for å spille igjen.')
+        }
+        if(P2 == 3){
+            P1 = 0
+            P2 = 0
+            Person1.innerHTML="P1:"+ P1;
+            Person2.innerHTML="P2:"+ P2;
+            alert('Spiller 2 vant! Trykk "ok" for å spille igjen.')
+        }
+    }
+    function gameLoop(){
+        tegnBane();
+        tegnBall();
+        tegnVRektangel();
+        tegnHRektangel();
+        ballVeggKollisjon();
+        ballRektangelKollisjon();
+        ballUtenforBane();
+        ballDødOgPoeng();
+        pongVinner();
+        if(theGameIsOn){
+            requestAnimationFrame(gameLoop);
+        }
+    }
+    gameLoop();
+    //Få ballen til å respawne
+    //Gi hver player poeng hvis den går uttenfor banene på den andre siden (hvis HRektangel traff og den ramler utenfor = +1 poeng til HRektangel)
+
+    //ballUtenforBane
+    /* if(ball.x < 0 || ball.x > width || ball.y < 0 || ball.y > height){
+            ball = new Ball(ball.xpos, ball.ypos, ball.radius);
+        } 
+
+        if(ball.xpos > bane.width + ball.radius*2){
+            theGameIsOn = false;
+        }
+
+        ///////
+        if(ball.x > minCanvas.width){
+            delete ball;
+            ball = new ball(minCanvas.width/2, minCanvas.height/2, -1, 1, 4, 4, 7, "white");
+        }
+        else if(ball.x < 0){
+            delete ball;
+            ball = new ball(minCanvas.width/2, minCanvas.height/2, -1, 1, 4, 4, 7, "white");
+        }
+        else if (ball.y > minCanvas.height){
+            delete ball;
+            ball = new ball(minCanvas.width/2, minCanvas.height/2, -1, 1, 4, 4, 7, "white");
+        }
+        else if(ball.y < 0){
+            delete ball;
+            ball = new ball(minCanvas.width/2, minCanvas.height/2, -1, 1, 4, 4, 7, "white");
+        }
+    
+        ///////
+        if (ball.xpos < 0 || ball.xpos > minCanvas.width || ball.ypos < 0 || ball.ypos > minCanvas.height) {
+        ball = new ball(minCanvas.width/2, minCanvas.height/2, -1, 1, 4, 4, 7, "white");
+        }
+    
+    //ball
+        var ball = {
+        radius: 7,
+        xpos: minCanvas.width/2,
+        ypos: minCanvas.height/2,
+        farge: "white",
+        xretning: -1,
+        yretning: 1,
+        xfart: 4,
+        yfart: 4
+    };
+
+    ball = new ball(minCanvas.width/2, minCanvas.height/2, -1, 1, 4, 4, 7, "white");*/
+</script>
+</body>
+</html>
