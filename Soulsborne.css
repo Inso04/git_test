@@ -1,0 +1,29 @@
+.bilde{
+    max-width: 200px;
+    max-height: 200px;
+}
+
+.hBilde{
+    max-width: 75px;
+    max-height: 75px;
+}
+.spill{
+    background-color: #2c2f33;
+}
+body{
+    background-color: #7289da;
+}
+h1{
+    color: white;
+    text-align: center;
+}
+.white{
+    color: aliceblue;
+}
+.flytt{
+    margin-left: 5vh;
+}
+#txtPris{
+    color: white;
+    font-size: 4vh;
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <script>
+            nu1 = parseFloat(prompt('Enter the first number: '));
+            nu2 = parseFloat(prompt('Enter the second number: '));
+            nu3 = parseFloat(prompt('Enter the third number: '));
+        
+            class tallfølge{
+        
+                sjekk(){
+        
+                    console.log([nu1,nu2,nu3])
+        
+                    if (nu2 - nu1 == nu3-nu2){
+                        console.log('Aritmetisk rekke')
+                        var nus  = ((nu1 + nu3)/2)*3
+                        console.log('Sum:'+ nus)
+                    }
+        
+                    else if (nu2 / nu1 == nu3 / nu2){
+                        var k = nu2 / nu1
+                        console.log('Kvotient:' + k)
+        
+                        if (k < 1 && k > -1){
+                            console.log('Konvergent geometrisk rekke')
+                            var nus  = nu1*((k**3-1)/(k-1))
+                            console.log('Sum:'+ nus)
+                        }
+        
+                        else{
+                            console.log('Divergent geometrisk rekke')
+                        }
+                    }
+        
+                    else{
+                        console.log('Ikke en definerbar rekke')
+                    }
+                }
+            }
+            tallfølge
+            const t = new tallfølge(); 
+            t.sjekk();
+        </script>
+    </body>
+</html>

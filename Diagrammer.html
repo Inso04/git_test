@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <h1> Stolpediagram </h1>
+        <style>
+            #chart {
+                display: flex;
+                width: 200px;
+                height: 100px;
+                flex-direction: row;
+                align-items: flex-end;
+            }
+            #chart > div{
+                background-color: darkorange;
+                margin: 5px;
+                flex-grow: 1;
+            }
+        </style>
+    </head>
+    <body>
+        <p> Unga Bunga </p>
+        <div id="chart">
+            <div style="height: 30px;"></div>
+            <div style="height: 80px;"></div>
+            <div style="height: 60px;"></div>
+            <div style="height: 40px;"></div>
+        </div>
+        <script>/*
+            var chart = document.getElementById("chart");
+            var STemp = [0, 5, 3, 2];
+            for(var temp of STemp){
+                chart.innerHTML +="<div style ='width:" +temp*10+ "px'>"+temp+"</div>";
+            }*/
+            
+        </script>
+    </body>
+</html>

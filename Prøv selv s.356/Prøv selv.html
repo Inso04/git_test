@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            #søyler > div{
+                height: 20px;
+                padding: 5px;
+                background-color: lightgreen;
+                margin-bottom: 5px;
+            }
+            #gSøyler > div{
+                height: 20px;
+                padding: 5px;
+                background-color: lightgreen;
+                margin-bottom: 5px;
+            }
+        </style>
+        <title>Table with Flags</title>
+    </head>
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <th>Land</th>
+                    <th>Areal</th>
+                    <th>Folketall</th>
+                    <th>Innbyggertall/km²</th>
+                    <th>Flagg</th>
+                </tr>
+            </thead>
+            <tbody id="tblLand"></tbody>
+        </table>
+        <h1 id="txtSvar"></h1>
+        <article id="søyler"></article>
+        <div id="divFlaggene"></div><br>
+
+        <form id="regCountry">
+            <input id="inpNavn" type="text" required placeholder="Navn på Land">
+            <input id="inpAreal" type="number" required placeholder="Areal på Land">
+            <input id="inpFolketall" type="number" required placeholder="Folketall til Land">
+            <!--<input id="inpInnbyggerKvm" type="number" required placeholder="Innbyggertall/km² til Land">
+            <input id="inpFlagg" type="image" required placeholder="Flagg til Land"> -->
+            <button type="submit">Registrer nytt land</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Land</th>
+                    <th>Areal</th>
+                    <th>Folketall</th>
+                    <th>Slett</th>
+                </tr>
+            </thead>
+            <tbody id="tblCountries"></tbody>
+        </table><br>
+
+        <form id="regGodteri">
+            <input id="inNavn" type="text" required placeholder="Navn på Godteri">
+            <input id="inSukker" type="number" required placeholder="Mengde sukker (g)">
+            <button type="submit">Registrer nytt godteri</button>
+        </form> <br>
+        <table>
+            <thead>
+                <tr>
+                    <th>Navn</th>
+                    <th>Sukker</th>
+                    <!--<th>Slett</th>-->
+                </tr>
+            </thead>
+            <tbody id="tblGodteri"></tbody>
+
+        </table>
+
+        <script>
+            var divFlaggene = document.getElementById("divFlaggene");
+            var txtSvar = document.getElementById("txtSvar");
+            var tblLand = document.getElementById("tblLand");
+
+            var søyler = document.getElementById("søyler");
+
+            var gSøyler = document.getElementById("gSøyler");
+
+            var regCountry = document.getElementById("regCountry");
+            var inpNavn = document.getElementById("inpNavn");
+            var inpAreal = document.getElementById("inpAreal");
+            var inpFolketall = document.getElementById("inpFolketall");
+            var inpInnbyggerKvm = document.getElementById("inpInnbyggerKvm");
+            var tblCountries = document.getElementById("tblCountries");
+            //var inpFlagg = document.getElementById("inpFlagg");
+            var Countries = [];
+
+            var regGodteri = document.getElementById("regGodteri");
+            var inNavn = document.getElementById("inNavn");
+            var inSukker = document.getElementById("inSukker");
+            var Candy = [];
+
+            class Land {
+                constructor(bildefil, navn, areal, folketall, innbyggertallKvm){
+                    this.bildefil = bildefil;
+                    this.navn = navn;
+                    this.areal = areal;
+                    this.folketall = folketall;
+                    this.innbyggertallKvm = innbyggertallKvm;
+                }
+
+                get klikkbartBilde(){
+                    return`<img src="${this.bildefil}" width="75px" height="75px" onclick="visLand('${this.navn}')">`;
+                }
+
+                get tabellrad(){
+                    var rad =`<tr>
+                        <td>${this.navn}</td>
+                        <td>${this.areal}</td>
+                        <td>${this.folketall}</td>
+                        <td>${this.innbyggertallKvm}</td>
+                        <td>${this.klikkbartBilde}</td>
+                    </tr>`;
+                    return rad;
+                }
+                
+                get søyler(){
+                    return `<div style="width:${this.folketall/10000}px;">${this.navn}-${this.folketall}</div>`;
+                }
+            }
+
+            class regLand {
+                constructor(navn, areal, folketall){
+                    this.navn = navn;
+                    this.areal = areal;
+                    this.folketall = folketall;
+                }
+
+                get lTabell(){
+                    var lrad =`<tr>
+                        <td>${this.navn}</td>
+                        <td>${this.areal}</td>
+                        <td>${this.folketall}</td>
+                        `//<td><button type="button" onclick="slettLand(${land.indexOf(this)})">Slett</button></td>
+                    `</tr>`;
+                    return lrad;
+                }
+            }
+
+            function visLand(navn){
+                txtSvar.innerHTML = navn;
+            }
+
+            function visCountries(){
+                tblCountries.innerHTML = "";
+                for(var regLand of Countries){
+                    tblCountries.innerHTML += regLand.lTabell;
+                }
+            }
+            regCountry.onsubmit = function(evt){
+                evt.preventDefault();
+                var nyttNavn = inpNavn.value;
+                var nyeAreal = Number(inpAreal.value);
+                var nyeFolketall = Number(inpFolketall.value);
+                //var nyeInnbygger = Number(inpInnbyggerKvm.value); husk å legge til nyeInnbygger nedenfor
+                //var nyttFlagg = new Image(inpFlagg.value); husk å legge til nyttflag nedenfor
+                var nyLand = new regLand(nyttNavn, nyeAreal, nyeFolketall);
+                Countries.push(nyLand);
+                visCountries();
+                var inpNavn = "";
+                var inpAreal = "";
+                var inpFolketall = "";
+            }
+
+            //GODTERI
+            class Godteri {
+                constructor(navn, sukker){
+                    this.navn = navn;
+                    this.sukker = sukker;
+                }
+                get tblGodteri(){
+                    var tGodteri = `<tr>
+                        <td>${this.navn}</td>
+                        <td>${this.sukker}</td>
+                        </tr>`;
+                    return tGodteri;
+                }
+            }
+            //tblGodteri trenger en onclick button: <td><button type="button" onclick="slettGodteri(${Godteri.indexOf(this)})">Slett</button></td>
+            /*function slettGodteri(index){
+                Godteri.splice(index, 1);
+                visGodteri();
+            } */
+            function visGodteri(){
+                tblGodteri.innerHTML = "";
+                for(var Godteri of Candy){
+                    tblGodteri.innerHTML += Godteri.tblGodteri;
+                }
+            }
+            regGodteri.onsubmit = function(evt){
+                evt.preventDefault();
+                var nyttNavn = inNavn.value;
+                var nyttSukker = Number(inSukker.value);
+                var nyGodteri = new Godteri(nyttNavn, nyttSukker);
+                Candy.push(nyGodteri);
+                visGodteri();
+                inNavn.value = "";
+                inSukker.value = "";
+            }
+
+
+            var finland = new Land("https://media.snl.no/media/257491/standard_Flag_of_Finland.svg.png", "Finland", 338440, 5541000, 1);
+            var norge = new Land("https://media.snl.no/media/8374/standard_norges-flagg.png", "Norge", 385207, 5408000, 2);
+            var danmark = new Land("https://media.snl.no/media/18289/standard_danmark.gif", "Danmark", 42951, 5857000, 3);
+
+            var smash = new Godteri("Smash", 39);
+            var kvikkLunsj = new Godteri("Kvikk Lunsj", 44.5);
+            var japp = new Godteri("Japp", 65.5);
+            var newEnergy = new Godteri("New Energy", 54);
+
+            tblLand.innerHTML += finland.tabellrad;
+            tblLand.innerHTML += norge.tabellrad;
+            tblLand.innerHTML += danmark.tabellrad;
+
+            søyler.innerHTML += finland.søyler;
+            søyler.innerHTML += norge.søyler;
+            søyler.innerHTML += danmark.søyler;
+
+            gSøyler.innerHTML += smash.gSøyler;
+            gSøyler.innerHTML += kvikkLunsj.gSøyler;
+            gSøyler.innerHTML += japp.gSøyler;
+            gSøyler.innerHTML += newEnergy.gSøyler;
+        </script>
+    </body>
+</html>

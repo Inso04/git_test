@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            #gSøyler > div{
+                height: 20px;
+                padding: 5px;
+                background-color: lightgreen;
+                margin-bottom: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <th>Land</th>
+                    <th>Areal</th>
+                    <th>Folketall</th>
+                </tr>
+            </thead>
+            <tbody id="tblLand"></tbody>
+        </table>
+        <div id="divFlaggene"></div><br>
+        
+        <article id="gSøyler"></article><br>
+
+        <form id="regCountry">
+            <input id="inpNavn" type="text" required placeholder="Navn på Land">
+            <input id="inpAreal" type="number" required placeholder="Areal på Land">
+            <input id="inpFolketall" type="number" required placeholder="Folketall til Land">
+            <button type="submit">Registrer nytt land</button>
+        </form>
+
+        <form id="regGodteri">
+            <input id="inNavn" type="text" required placeholder="Navn på Godteri">
+            <input id="inSukker" type="number" required placeholder="Mengde sukker (g)">
+            <button type="submit">Registrer nytt godteri</button>
+        </form>
+
+        <script>
+            var gSøyler = document.getElementById("gSøyler");
+
+            var regCountry = document.getElementById("regCountry");
+            var inpNavn = document.getElementById("inpNavn");
+            var inpAreal = document.getElementById("inpAreal");
+            var inpFolketall = document.getElementById("inpFolketall");
+            var Countries = [];
+
+            var regGodteri = document.getElementById("regGodteri");
+            var inNavn = document.getElementById("inNavn");
+            var inSukker = document.getElementById("inSukker");
+            var Candy = [];
+
+            class Land {
+                constructor(navn, areal, folketall){
+                    this.navn = navn;
+                    this.areal = areal;
+                    this.folketall = folketall;
+                }
+
+                get tabellrad(){
+                    var rad =`<tr>
+                        <td>${this.navn}</td>
+                        <td>${this.areal}</td>
+                        <td>${this.folketall}</td>
+                    </tr>`;
+                    return rad;
+                }
+            }
+            function visCountries(){
+                tblLand.innerHTML = "";
+                for(var Land of Countries){
+                    tblLand.innerHTML += Land.tabellrad;
+                }
+            }
+
+            regCountry.onsubmit = function(evt){
+                evt.preventDefault();
+                var nyttNavn = inpNavn.value;
+                var nyeAreal = Number(inpAreal.value);
+                var nyeFolketall = Number(inpFolketall.value);
+                var nyLand = new Land(nyttNavn, nyeAreal, nyeFolketall);
+                Countries.push(nyLand);
+                visCountries();
+            }
+
+            class Godteri {
+                constructor(navn, sukker){
+                    this.navn = navn;
+                    this.sukker = sukker;
+                }
+                get gSøyler(){
+                    return `<div style="width:${this.sukker}vh;">${this.navn}-${this.sukker}</div>`;
+                }
+            }
+
+            function visGodteri(){
+                gSøyler.innerHTML = "";
+                for(var Godteri of Candy){
+                    gSøyler.innerHTML += Godteri.gSøyler;
+                }
+            }
+            regGodteri.onsubmit = function(evt){
+                evt.preventDefault();
+                var nyttNavn = inNavn.value;
+                var nyttSukker = Number(inSukker.value);
+                var nyGodteri = new Godteri(nyttNavn, nyttSukker);
+                Candy.push(nyGodteri);
+                visGodteri();
+            }
+        </script>

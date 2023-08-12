@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="Soulsborne.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <div class="columns">
+            <div class="column">
+                <div class="spill">
+                    <h1 style="font-size: 5vh;">What are ya buyin'?</h1>
+                    <table><tbody id="tblSpiller"></tbody></table>
+                </div>
+            </div>
+            <div class="column">
+                <div class="handlekurv">
+                    <h1 style="font-size: 5vh;">Handlekurv</h1>
+                    <div id="txtPris"></div><br>
+                    <table><tbody id="tblHandlekurv"></tbody></table>
+                </div>
+            </div>
+        </div>
+
+        <script src="Soulsborne.js"></script>
+        <script>
+            src="main.json"
+            var tblSpill = document.getElementById("tblspiller");
+            var tblHandlekurv = document.getElementById("tblHandlekurv");
+            var spiller = new Map();
+            var kjøpteSpill = new Map();
+            for(var spill of Spillbutikken.spiller){
+                spiller.set(spill.id, spill);
+            }
+            for(var spill of spiller.values()){
+                tblSpiller.innerHTML += `<tr>
+                    <td><div class="bilde">
+                    <div class="flex-box">
+                    <img src="${spill.poster}">
+                    </div>
+                    </div></td>
+                
+                <td><div class="white">${spill.tittel}</div></td>
+                <td><div class="flytt"><button onclick="kjøp('${spill.id}')">Kjøp</button></div></td>
+                </tr>`;
+            }
+
+            function visHandlekurv(){
+                tblHandlekurv.innerHTML="";
+                for(var spill of kjøpteSpill.values()){
+                    tblHandlekurv.innerHTML += `<tr>
+                    <td><div class="hBilde">
+                    <div class="flex-box">
+                    <img src="${spill.poster}"></td></div></div>
+                    <td> ${spill.tittel} <b> ${spill.pris} Runes</b></td>
+                    <td><div class="flytt"><button onclick="slett('${spill.id}')">x</button></div></td></tr>`;
+                }
+                beregnPris();
+            }
+            function slett(spillID){
+                kjøpteSpill.delete(spillID);
+                visHandlekurv();
+            }
+            function kjøp(spillID){
+                console.log(spillID);
+                var kjøptSpill = spiller.get(spillID);
+                console.log(kjøptSpill);
+                kjøpteSpill.set(spillID, kjøptSpill);
+                visHandlekurv();
+            }
+            function beregnPris(){
+                var pris = 0;
+                for(var spill of kjøpteSpill.values()){
+                    pris += spill.pris;
+                }
+                txtPris.innerHTML = `Sum: ${pris} Runes`;
+            }
+        </script>
+    </body>

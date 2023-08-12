@@ -1,0 +1,70 @@
+* { /* style på alt */
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body { /* style på body */
+    background: #36393f;
+}
+
+#board { /* style på brettet */
+    position: relative;
+    width: 100%;
+    min-width: 550px;
+}
+
+#messageArea { /* style på hit/miss meldingen */
+    width: 100%;
+    text-align: center;
+    margin-top: 5px;
+    color: #b9bbbe;
+    font-family: "Comic Sans MS";
+    font-size: 25px;
+}
+
+table { /* style på plassering av brettet */
+    border-collapse: separate;
+    border-spacing: 3px;
+    margin: 0 auto;
+}
+
+td { /* style på boksene */
+    position: relative;
+    width: 70px;
+    height: 70px;
+    border: 2px solid #5865f2;
+}
+
+td:hover { /* gir boksen skygge med hover */
+    background: #494e58;
+}
+
+td div { /* style på div til boksene */
+  width: 70px;
+ height: 70px;
+}
+
+.numbers, .letters { /* style på kordinatsystemet */
+    text-align: center;
+    font-size: 20px;
+    font-family: "Comic Sans MS";
+    color: #5865f2;
+    height: 40px;
+    width: 40px;
+    border: none;
+}
+
+.hit { /* style på båten (hit) */
+  position: relative;
+  width: 68px;
+    height: 68px;
+  background: #b6221a;
+}
+
+.miss { /* style på havet (miss) */
+  position: relative;
+  width: 68px;
+    height: 68px;
+  background: #02a2ff;
+}
